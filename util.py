@@ -2,11 +2,6 @@ import numpy as np
 import scipy.io
 import matplotlib.pyplot as plt
 
-IMG_HEIGHT   = 16
-IMG_WIDTH    = 16
-PATCH_HEIGHT = 4
-PATCH_WIDGHT = 4
-
 class Image(object):
     def __init__(self, data, patches, label):
         self.label = label

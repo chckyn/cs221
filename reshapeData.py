@@ -4,15 +4,21 @@ import shelve
 import scipy.io
 
 from util import Image
+import const
+
+IMG_HEIGHT = const.IMG_HEIGHT
+IMG_WIDTH = const.IMG_WIDTH
+PATCH_HEIGHT = const.PATCH_HEIGHT
+PATCH_WIDTH = const.PATCH_WIDTH
 
 def makeImageArray(imageData, imageLabels):
     images = []
     for i in range(imageData.shape[1]):
         patches = [] 
-        data = imageData[:,i].reshape(16,16)
-        for j in range(4):
-            for k in range(4):
-                patch = data[j:j+4,k:k+4]
+        data = imageData[:,i].reshape(IMG_HEIGHT,IMG_WIDTH)
+        for j in range(PATCH_HEIGHT):
+            for k in range(PATCH_WIDTH):
+                patch = data[j:j+PATCH_HEIGHT,k:k+PATCH_WIDTH]
                 patches.append(patch)
     
         label = None
