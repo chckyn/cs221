@@ -41,7 +41,7 @@ def printVectorRMS(v):
     rms_v = math.sqrt(numpy.average(var_v))
     print '{:.2e}'.format(float(rms_v))
 
-def RBM_Free_Energy(x, y):
+def trainRBM(x, y):
     # make input data binary
     data = makeBinary(x)
 
@@ -51,14 +51,14 @@ def RBM_Free_Energy(x, y):
     b_v = theano.shared(b_v_init.reshape(b_v_init.shape[0], 1), name='b_v')
     b_h = theano.shared(b_h_init.reshape(b_h_init.shape[0], 1), name='b_h')
 
-    # compute free energy
+    # formulate free energy
     v = T.matrix('v')
     F = -T.dot(T.flatten(b_v, 1), v)\
         - T.sum(T.log(1.0 + T.exp(T.addbroadcast(b_h, 1) + T.dot(W, v))), axis=0)
-    free_energy = theano.function([v], F.sum())
+    free_energy = theano.function([v], F.sum()) # compile formulation
 
-    # approximate expected free energy
-    # using k=1 constrastive divergence
+    # formulate approximate expected free energy
+    # using k=1 contrastive divergence
     rng = RandomStreams(RANDOM_SEED)
     h_0_mean = 1.0/(1.0 + T.exp(-T.addbroadcast(b_h, 1) - T.dot(W, v)))
     h_0 = rng.binomial(size=h_0_mean.shape, n=1, p=h_0_mean)
@@ -66,11 +66,11 @@ def RBM_Free_Energy(x, y):
     v_0 = rng.binomial(size=v_0_mean.shape, n=1, p=v_0_mean)
     F_exp = -T.dot(T.flatten(b_v, 1), v_0)\
             - T.sum(T.log(1.0 + T.exp(T.addbroadcast(b_h, 1) + T.dot(W, v_0))), axis=0)
-    exp_free_energy = theano.function([v], F_exp.sum())
+    exp_free_energy = theano.function([v], F_exp.sum()) # compile formulation
 
-    # compute param gradients
+    # formulate param gradients
     dParams = T.grad(F.sum() - F_exp.sum(), [W, b_v, b_h], consider_constant=[v_0])
-    dParams_func = theano.function([v], dParams)
+    dParams_func = theano.function([v], dParams) # compile formulation
 
     # train RBM
     old_free_energy = free_energy(data)
@@ -122,7 +122,7 @@ def main():
     train_labels = data['train_labels']
     test_patterns = data['test_patterns']
     test_labels = data['test_labels']
-    RBM_Free_Energy(train_patterns, train_labels)
+    trainRBM(train_patterns, train_labels)
 
 if __name__ == '__main__':
     main()
