@@ -42,9 +42,9 @@ def RBM_Free_Energy(x, y):
     v = T.matrix('v')
     F = -T.dot(T.flatten(b_v, 1), v)\
         - T.sum(T.log(1.0 + T.exp(T.addbroadcast(b_h, 1) + T.dot(W, v))), axis=0)
-    free_energy = theano.function([v], F)
+    free_energy = theano.function([v], F.sum())
     value = free_energy(data)
-    print '             Total Free Energy =', value.sum()
+    print '             Total Free Energy =', value
 
     # approximate expected free energy
     # using k=1 constrastive divergence
@@ -55,9 +55,15 @@ def RBM_Free_Energy(x, y):
     v_0 = rng.binomial(size=v_0_mean.shape, n=1, p=v_0_mean)
     F_exp = -T.dot(T.flatten(b_v, 1), v_0)\
             - T.sum(T.log(1.0 + T.exp(T.addbroadcast(b_h, 1) + T.dot(W, v_0))), axis=0)
-    exp_free_energy = theano.function([v], F_exp)
+    exp_free_energy = theano.function([v], F_exp.sum())
     value = exp_free_energy(data)
-    print 'Estimated Expected Free Energy =', value.sum()
+    print 'Estimated Expected Free Energy =', value
+
+    # compute param deltas
+    dParams = T.grad(F.sum() - F_exp.sum(), [W, b_v, b_h], consider_constant=[v_0])
+    dParams_func = theano.function([v], dParams)
+    value = dParams_func(data)
+    #print value
 
 def main():
     data = scipy.io.loadmat('data/usps_resampled.mat')
