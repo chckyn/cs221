@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-import shelve
+import pickle
 import sys
 from matplotlib import pyplot as plt
 
-db = shelve.open('data/classifiers.db')
-c = db[sys.argv[1]]
+f = open(sys.argv[1])
+c = pickle.load(f)
 
 while True:
     while True:
