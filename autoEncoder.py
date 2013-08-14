@@ -1,8 +1,8 @@
 #!/usr/bin/env/python
 
 from RBM import RBM
-from RBM import makeBinary
 
+import numpy
 import scipy.io
 import matplotlib.pyplot as plt
 import sys
@@ -14,8 +14,8 @@ import pickle
 SAMPLE_IMAGE_IDX = 2
 
 def main():
-    learningRate = float(sys.argv[1]) if len(sys.argv) >= 2 else 0.00001
-    maxIterations = int(sys.argv[2]) if len(sys.argv) >= 3 else 1000
+    learningRate = float(sys.argv[1]) if len(sys.argv) >= 2 else 0.0001
+    maxIterations = int(sys.argv[2]) if len(sys.argv) >= 3 else 300
 
     # load data
     data = scipy.io.loadmat('data/usps_resampled.mat')
@@ -23,10 +23,6 @@ def main():
     train_labels = data['train_labels']
     test_patterns = data['test_patterns']
     test_labels = data['test_labels']
-
-    binary_train_patterns = deepcopy(train_patterns)
-    for i in range(train_patterns.shape[1]):
-        binary_train_patterns[:,i] = makeBinary(train_patterns[:,i])
 
     # initialize and train RBM
     rbm = RBM(192, train_patterns, learningRate=learningRate, verbose=True)
@@ -61,8 +57,6 @@ def main():
             break
         # show example image
         plt.matshow(train_patterns[:,sampleImage].reshape(16, 16))
-        #plt.matshow(binary_train_patterns[:,sampleImage].reshape(16, 16))
-        #plt.matshow(hidden_patterns[:,sampleImage].reshape(16, 16))
         plt.matshow(ae_patterns[:,sampleImage].reshape(16, 16))
         plt.show()
 
