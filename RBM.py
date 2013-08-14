@@ -77,6 +77,12 @@ class RBM(object):
             [self.W, self.b_v, self.b_h], consider_constant=[v_0])
         self.dParams_func = theano.function([v], dParams) # compile method
 
+    def translate(self, visData):
+        return 1.0/(1.0 + numpy.exp(-self.b_h.get_value() - numpy.dot(self.W.get_value(), visData)))
+
+    def invert(self, hidData):
+        return 1.0/(1.0 + numpy.exp(-self.b_v.get_value() - numpy.dot(numpy.transpose(self.W.get_value()), hidData)))
+
     def sampleHidden(self, v):
         h_mean = 1.0/(1.0 + T.exp(-T.addbroadcast(self.b_h, 1) - T.dot(self.W, v)))
         return self.rng.binomial(size=h_mean.shape, n=1, p=h_mean)
