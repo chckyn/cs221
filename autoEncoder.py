@@ -30,7 +30,7 @@ def main():
 
     # initialize and train RBM
     rbm = RBM(256, train_patterns, learningRate=learningRate, verbose=True)
-    rbm.train(convThreshold=0.01, maxIterations=maxIterations)
+    iterationsCompleted = rbm.train(convThreshold=0.01, maxIterations=maxIterations)
 
     print 'Autoencoding. . . '
     hidden_patterns = rbm.translate(train_patterns)
@@ -46,7 +46,7 @@ def main():
                     y = raw_input("Save this classifier (y)? ")
                     if y in ['y','']:
                         db = shelve.open('data/classifiers.db')
-                        db[str((learningRate, 256, maxIterations))] = \
+                        db[str((learningRate, 256, iterationsCompleted))] = \
                                 Classifier(train_patterns, binary_train_patterns, hidden_patterns, ae_patterns)
                         db.close()
                     sys.exit(0)

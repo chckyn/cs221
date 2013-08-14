@@ -99,58 +99,68 @@ class RBM(object):
         old_free_energy = self.free_energy(self.data)
         old_exp_free_energy = self.exp_free_energy(self.data)
 
-        for i in range(maxIterations):
-            # compute gradients
-            (dW, db_v, db_h) = self.dParams_func(self.data)
+        i = 0
+        iterationsCompleted = 0
+        while i < maxIterations:
+            try:
+                # compute gradients
+                (dW, db_v, db_h) = self.dParams_func(self.data)
 
-            # compute RMS values
-            W_rms = computeMatrixRMS(self.W.get_value())
-            dW_rms = computeMatrixRMS(dW)
-            b_v_rms = computeVectorRMS(self.b_v.get_value())
-            db_v_rms = computeVectorRMS(db_v)
-            b_h_rms = computeVectorRMS(self.b_h.get_value())
-            db_h_rms = computeVectorRMS(db_h)
+                # compute RMS values
+                W_rms = computeMatrixRMS(self.W.get_value())
+                dW_rms = computeMatrixRMS(dW)
+                b_v_rms = computeVectorRMS(self.b_v.get_value())
+                db_v_rms = computeVectorRMS(db_v)
+                b_h_rms = computeVectorRMS(self.b_h.get_value())
+                db_h_rms = computeVectorRMS(db_h)
 
-            # update params
-            self.W.set_value(self.W.get_value() + self.learningRate*dW)
-            self.b_v.set_value(self.b_v.get_value() + self.learningRate*db_v)
-            self.b_h.set_value(self.b_h.get_value() + self.learningRate*db_h)
+                # update params
+                self.W.set_value(self.W.get_value() - self.learningRate*dW)
+                self.b_v.set_value(self.b_v.get_value() - self.learningRate*db_v)
+                self.b_h.set_value(self.b_h.get_value() - self.learningRate*db_h)
 
-            # compute free energy
-            new_free_energy = self.free_energy(self.data)
-            new_exp_free_energy = self.exp_free_energy(self.data)
-            delta_free_energy = new_free_energy - old_free_energy
-            delta_exp_free_energy = new_exp_free_energy - old_exp_free_energy
+                # compute free energy
+                new_free_energy = self.free_energy(self.data)
+                new_exp_free_energy = self.exp_free_energy(self.data)
+                delta_free_energy = new_free_energy - old_free_energy
+                delta_exp_free_energy = new_exp_free_energy - old_exp_free_energy
 
-            if self.verbose:
-                print '===============', i, '================'
+                if self.verbose:
+                    print '===============', i, '================'
 
-                # print params and their gradients
-                if W_rms > 0 and b_v_rms > 0 and b_h_rms > 0:
-                    print '   <W> =', '{:.2e}'.format(float(W_rms)),\
-                          '  <dW> =', '{:.2e}'.format(float(dW_rms)),\
-                          'delta =', '{:.3f}'.format(float(dW_rms/W_rms))
-                    print ' <b_v> =', '{:.2e}'.format(float(b_v_rms)),\
-                          '<db_v> =', '{:.2e}'.format(float(db_v_rms)),\
-                          'delta =', '{:.3f}'.format(float(db_v_rms/b_v_rms))
-                    print ' <b_h> =', '{:.2e}'.format(float(b_h_rms)),\
-                          '<db_h> =', '{:.2e}'.format(float(db_h_rms)),\
-                          'delta =', '{:.3f}'.format(float(db_h_rms/b_h_rms))
+                    # print params and their gradients
+                    if W_rms > 0 and b_v_rms > 0 and b_h_rms > 0:
+                        print '   <W> =', '{:.2e}'.format(float(W_rms)),\
+                              '  <dW> =', '{:.2e}'.format(float(dW_rms)),\
+                              'delta =', '{:.3f}'.format(float(dW_rms/W_rms))
+                        print ' <b_v> =', '{:.2e}'.format(float(b_v_rms)),\
+                              '<db_v> =', '{:.2e}'.format(float(db_v_rms)),\
+                              'delta =', '{:.3f}'.format(float(db_v_rms/b_v_rms))
+                        print ' <b_h> =', '{:.2e}'.format(float(b_h_rms)),\
+                              '<db_h> =', '{:.2e}'.format(float(db_h_rms)),\
+                              'delta =', '{:.3f}'.format(float(db_h_rms/b_h_rms))
  
-                # print free energy
-                print '                    F =', '{:.2e}'.format(float(old_free_energy))
-                print '              Delta F =', '{:.2e}'.format(float(delta_free_energy))
-                print '      Est. Expected F =', '{:.2e}'.format(float(old_exp_free_energy))
-                print 'Delta Est. Expected F =', '{:.2e}'.format(float(delta_exp_free_energy))
+                    # print free energy
+                    print '                    F =', '{:.2e}'.format(float(old_free_energy))
+                    print '              Delta F =', '{:.2e}'.format(float(delta_free_energy))
+                    print '      Est. Expected F =', '{:.2e}'.format(float(old_exp_free_energy))
+                    print 'Delta Est. Expected F =', '{:.2e}'.format(float(delta_exp_free_energy))
 
-            # check for convergence
-            if W_rms > 0 and dW_rms/W_rms < convThreshold and\
-               b_v_rms > 0 and db_v_rms/b_v_rms < convThreshold and\
-               b_h_rms > 0 and db_h_rms/b_h_rms < convThreshold:
-                break
+                # check for convergence
+                if W_rms > 0 and dW_rms/W_rms < convThreshold and\
+                   b_v_rms > 0 and db_v_rms/b_v_rms < convThreshold and\
+                   b_h_rms > 0 and db_h_rms/b_h_rms < convThreshold:
+                    break
 
-            old_free_energy = new_free_energy
-            old_exp_free_energy = new_exp_free_energy
+                old_free_energy = new_free_energy
+                old_exp_free_energy = new_exp_free_energy
+                i += 1
+                iterationsCompleted += 1
+            except KeyboardInterrupt:
+                i = maxIterations
+
+        return iterationsCompleted
+
 
 def main():
     # load data
