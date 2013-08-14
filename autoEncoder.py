@@ -9,7 +9,7 @@ import sys
 from copy import deepcopy
 
 from classifier import Classifier
-import shelve
+import pickle
 
 SAMPLE_IMAGE_IDX = 2
 
@@ -30,7 +30,7 @@ def main():
 
     # initialize and train RBM
     rbm = RBM(192, train_patterns, learningRate=learningRate, verbose=True)
-    rbm.train(convThreshold=0.03, maxIterations=maxIterations)
+    iterationsCompleted = rbm.train(convThreshold=0.03, maxIterations=maxIterations)
 
     print 'Autoencoding. . . '
     hidden_patterns = rbm.translate(train_patterns)
@@ -43,11 +43,11 @@ def main():
                 sampleImage = raw_input("Pick a sample image from [0-"+str(train_patterns.shape[1]-1)+"] (q to quit): ")
                 if sampleImage == 'q':
                     y = raw_input("Save this classifier (y)? ")
+                    fn = 'data/classifier_'+str((learningRate, 192, iterationsCompleted))
                     if y in ['y','']:
-                        db = shelve.open('data/classifiers.db')
-                        db[str((learningRate, 256, iterationsCompleted))] = \
-                                Classifier(train_patterns, binary_train_patterns, hidden_patterns, ae_patterns)
-                        db.close()
+                        f = open(fn,'w')
+                        pickle.dump(Classifier(train_patterns, binary_train_patterns, hidden_patterns, ae_patterns), f)
+                        print "Classifer saved as "+fn
                     sys.exit(0)
                 sampleImage = int(sampleImage)
                 if sampleImage not in range(train_patterns.shape[1]):

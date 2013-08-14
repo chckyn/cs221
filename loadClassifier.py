@@ -26,7 +26,5 @@ while True:
 
     # show example image
     plt.matshow(c.train_patterns[:,sampleImage].reshape(16, 16))
-    plt.matshow(c.binary_train_patterns[:,sampleImage].reshape(16, 16))
-    plt.matshow(c.hidden_patterns[:,sampleImage].reshape(16, 16))
     plt.matshow(c.ae_patterns[:,sampleImage].reshape(16, 16))
     plt.show()
