@@ -9,8 +9,8 @@ import sys
 SAMPLE_IMAGE_IDX = 2
 
 def main():
-    learningRate = float(sys.argv[1]) if len(sys.argv) >= 2 else 0.00001
-    maxIterations = int(sys.argv[2]) if len(sys.argv) >= 3 else 1000
+    learningRate = float(sys.argv[1]) if len(sys.argv) >= 2 else 0.0001
+    maxIterations = int(sys.argv[2]) if len(sys.argv) >= 3 else 300
 
     # load data
     data = scipy.io.loadmat('data/usps_resampled.mat')
