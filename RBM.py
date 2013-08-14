@@ -13,7 +13,7 @@ from theano.tensor.shared_randomstreams import RandomStreams
 RANDOM_SEED = 1234
 NUM_HID = 128
 BINARY_THRESHOLD = 0.5
-INIT_WEIGHT_SIGMA = 1.0
+INIT_WEIGHT_SIGMA = 0.5
 INIT_VIS_BIAS_SIGMA = 0.0
 INIT_HID_BIAS_SIGMA = 0.0
 LEARNING_RATE = 0.1
@@ -53,7 +53,7 @@ class RBM(object):
         self.data = makeBinary(training_data)
 
         # initialize params
-        W_init = initWeightVar*rng.randn(self.numHid, self.numVis)
+        W_init = initWeightVar*(rng.rand(self.numHid, self.numVis) - 0.5)
         self.W = theano.shared(W_init, name='W')
         b_v_init = initVisBiasSigma*rng.randn(self.numVis)
         self.b_v = theano.shared(b_v_init.reshape(b_v_init.shape[0], 1), name='b_v')
@@ -66,15 +66,21 @@ class RBM(object):
         self.free_energy = theano.function([v], F.sum()) # compile method
 
         # formulate approximate expected free energy
-        # using k=1 contrastive divergence (negative phase)
+        # using k=4 contrastive divergence (negative phase)
         h_0 = self.sampleHidden(v)
         v_0 = self.sampleVisible(h_0)
-        F_exp = self.formulateFreeEnergy(v_0)
+        h_1 = self.sampleHidden(v_0)
+        v_1 = self.sampleVisible(h_1)
+        h_2 = self.sampleHidden(v_1)
+        v_2 = self.sampleVisible(h_2)
+        h_3 = self.sampleHidden(v_2)
+        v_3 = self.sampleVisible(h_3)
+        F_exp = self.formulateFreeEnergy(v_3)
         self.exp_free_energy = theano.function([v], F_exp.sum()) # compile method
 
         # formulate param gradients
         dParams = T.grad(F.sum() - F_exp.sum(),\
-            [self.W, self.b_v, self.b_h], consider_constant=[v_0])
+            [self.W, self.b_v, self.b_h], consider_constant=[v_3])
         self.dParams_func = theano.function([v], dParams) # compile method
 
     def translate(self, visData):
@@ -112,9 +118,9 @@ class RBM(object):
             db_h_rms = computeVectorRMS(db_h)
 
             # update params
-            self.W.set_value(self.W.get_value() + self.learningRate*dW)
-            self.b_v.set_value(self.b_v.get_value() + self.learningRate*db_v)
-            self.b_h.set_value(self.b_h.get_value() + self.learningRate*db_h)
+            self.W.set_value(self.W.get_value() - self.learningRate*dW)
+            self.b_v.set_value(self.b_v.get_value() - self.learningRate*db_v)
+            self.b_h.set_value(self.b_h.get_value() - self.learningRate*db_h)
 
             # compute free energy
             new_free_energy = self.free_energy(self.data)
