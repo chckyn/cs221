@@ -42,7 +42,7 @@ def main():
                     fn = 'data/classifier_'+str((learningRate, 192, iterationsCompleted))
                     if y in ['y','']:
                         f = open(fn,'w')
-                        pickle.dump(Classifier(train_patterns, binary_train_patterns, hidden_patterns, ae_patterns), f)
+                        pickle.dump(Classifier(train_patterns, hidden_patterns, ae_patterns), f)
                         print "Classifer saved as "+fn
                     sys.exit(0)
                 sampleImage = int(sampleImage)
