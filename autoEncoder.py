@@ -1,6 +1,7 @@
 #!/usr/bin/env/python
 
 from RBM import RBM
+from RBM import TrainedRBM
 
 import numpy
 import scipy.io
@@ -39,11 +40,11 @@ def main():
                 sampleImage = raw_input("Pick a sample image from [0-"+str(train_patterns.shape[1]-1)+"] (q to quit): ")
                 if sampleImage == 'q':
                     y = raw_input("Save this classifier (y)? ")
-                    fn = 'data/classifier_'+str((learningRate, 192, iterationsCompleted))
+                    fn = 'data/RBM_'+str((learningRate, 192, iterationsCompleted))
                     if y in ['y','']:
                         f = open(fn,'w')
-                        pickle.dump(Classifier(train_patterns, hidden_patterns, ae_patterns), f)
-                        print "Classifer saved as "+fn
+                        pickle.dump(TrainedRBM(rbm.W, rbm.b_h, rbm.b_v), f)
+                        print "RBM saved as "+fn
                     sys.exit(0)
                 sampleImage = int(sampleImage)
                 if sampleImage not in range(train_patterns.shape[1]):

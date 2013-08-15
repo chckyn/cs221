@@ -167,6 +167,11 @@ class RBM(object):
 
         return iterationsCompleted
 
+class TrainedRBM(RBM):
+    def __init__(self, W, b_h, b_v):
+        self.W = W
+        self.b_h = b_h
+        self.b_v = b_v
 
 def main():
     # load data
