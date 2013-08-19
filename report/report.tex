@@ -229,6 +229,8 @@ The decrease in the error rate shown in column E of Fig. 3 corresponding to the 
 
 \section{Conclusion}\label{sec:conclusion}
 
+In summary, we have demonstrated the utility of using autoencoders to learn feature spaces for both the purpose of data compression as well as classification via supervised machine learning. The method of Hinton {\em et al.} was employed to pretrain restricted Boltzmann machines which are then layered together to construct deep neural network autoencoders. The parameters of these autoencoders are further refined using a backpropagation algorithm. We demonstrated by showing several examples the mild loss in image quality after dramatic reductions in dimensionality via autoencoding. Finally, we showed through several supervised learning experiments using naive Bayes classifiers that the error rate can be reduced using dimensionally reduced feature spaces derived from autoencoders.
+
 \nocite{*}
 \bibliography{refs}{}
 \bibliographystyle{amsplain}
