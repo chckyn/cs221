@@ -85,6 +85,9 @@ A detailed description of the technique of Hinton {\em et al.} is beyond the sco
 \begin{equation}
 E(\bf{\nu}, \bf{h}) = -\sum_{i\in\mathrm{visible}}{b_i\nu_i} - \sum_{j\in\mathrm{hidden}}{b_jh_j - \sum_{i,j}{\nu_ih_jw_{ij}}.
 \end{equation}
+As per the Maxwell-Boltzmann distribution, the probability of a particular image is proportional to $\mathrm{exp}\left(-E(\bf{\nu}, \bf{h})\right)$. Using stochastic gradient descent to maximize the log-likelihood of our training images, along with an approximation technique known as {\em contrastive divergence} that allows us estimate an expectation over all possible unit configurations under the probability distribution modeled by an RBM, we iteratively update the biases and weights of an RBM. Once a RBM is optimized in this manner, it is straighforward to create an autoencoder with a single hidden layer by adding an output layer that simply decodes the states of the hidden layer. To construct an autoencoder with three hidden layers, we pretrain an additional RBM using the output (i.e. hidden layer) of the first RBM as input. In this way, multiple RBMs can be unrolled to form pretrained deep neural network autoencoders.
+
+Once pretrained, an autoencoder can be fine-tuned using backprogation without fear of local minima in our objective function (i.e. the mean squared error). As with the RBM pretraining technique, the details of this classic algorithm for training neural networks are beyond this report's scope and are well documented elsewhere (an example implementation is also provided within our source code). The essence of this algorithm is to propagate the discrepancy between the autoencoder's output and its input back through the neural network, adjusting its parameters along the way.
 
 \section{Results}\label{sec:results}
 
