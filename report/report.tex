@@ -93,7 +93,7 @@ These autoencoders essentially function by compressing and decompressing the inp
 
 \section{Results}\label{sec:results}
 
-During the course of our project, we constructed several autoencoders consisting of a variety of dimensions. We focus here on autoencoders constructed from RBMs consisting of 3000, 1500, 750, 100, 30, and 10 node hidden layers. In addition to these hidden layers, all autoencoders have 784 node input and output layers. For example, our narrowest waist autoencoder consists of 784-3000-1500-750-100-30-10-30-100-750-1500-3000-784 node layers, while our fattest wait autoencoder consists of 784-3000-784 node layers. In Fig. 1 we show several autoencoded handwritten digits. From the leftmost to rightmost columns we have: the original image, encoded using 784-3000, 784-3000-1500, 784-3000-1500-750, 784-3000-1500-750-100, 784-3000-1500-750-100-30, and 784-3000-1500-750-100-30-10.
+During the course of our project, we constructed several autoencoders consisting of a variety of dimensions. We focus here on autoencoders constructed from RBMs consisting of 3000, 1500, 750, 100, 30, and 10 node hidden layers. In addition to these hidden layers, all autoencoders have 784 node input and output layers. For example, our narrowest waist autoencoder consists of 784-3000-1500-750-100-30-10-30-100-750-1500-3000-784 node layers, while our fattest wait autoencoder consists of 784-3000-784 node layers. In Fig. 1 we show several autoencoded handwritten digits. From the leftmost to rightmost columns we have: the original image, encoded using 784-3000, 784-3000-1500, 784-3000-1500-750, 784-3000-1500-750-100, 784-3000-1500-750-100-30, and 784-3000-1500-750-100-30-10. As expected, the quality of the reproduction reduces from left to right.
 
 \begin{figure}[htbp!]
     \centering
@@ -111,6 +111,8 @@ During the course of our project, we constructed several autoencoders consisting
         \label{fig:incremental_5-9}
     \end{subfigure}
 \end{figure}
+
+To test the utility of the learned feature spaces within the context of supervised learning, we 
 
 \begin{figure}[htbp!]
     \centering
