@@ -141,13 +141,13 @@ machinery from physics to help pretrain our RBMs. Perhaps the most fundamental
 of these is the {\em free energy} ascribed to each training image, given by
 
 \begin{equation}
-E(\bf{\nu}, \bf{h}) = -\sum_{i\in\mathrm{visible}}{b_i\nu_i} - \sum_{j\in\mathrm{hidden}}{b_jh_j - \sum_{i,j}{\nu_ih_jw_{ij}}}.
+E(\boldsymbol{\nu}, \mathbf{h}) = -\sum_{i\in\mathrm{visible}}{b_i\nu_i} - \sum_{j\in\mathrm{hidden}}{b_jh_j - \sum_{i,j}{\nu_ih_jw_{ij}}}.
 \end{equation}
 As per the Maxwell-Boltzmann distribution, the probability of a particular image
-is proportional to\\$\mathrm{exp}\left(-E(\bf{\nu}, \bf{h})\right)$. Using
+is proportional to\\$\mathrm{exp}\left(-E(\boldsymbol{\nu}, \mathbf{h})\right)$. Using
 stochastic gradient descent to maximize the log-likelihood of our training
-images, along with an approximation technique known as {\em contrastive
-divergence} that allows us estimate an expectation over all possible unit
+images, along with an approximation technique known as {\em contrastive divergence}
+that allows us estimate an expectation over all possible unit
 configurations under the probability distribution modeled by an RBM, we
 iteratively update the biases and weights of an RBM. Once an RBM is optimized in
 this manner, it is straighforward to create an autoencoder with a single hidden
