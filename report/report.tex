@@ -62,7 +62,7 @@ urlcolor=black
 
 \maketitle
 
-This is a short introduction.
+An unsupervised feature learning technique is used in conjunction with supervised machine learning to classify handwritten digits from the MNIST database. The method of Hinton {\em et al.}\ref{art:HS} is used to construct and train multilayer neural network autoencoders by pretraining restricted Boltzmann machines. Autoencoders are then fine-tuned using a backpropagation algorithm. Dimensionally reduced feature spaces are derived from these autoencoders and used to train naive Bayes classifiers. We show that feature spaces learned in this way not only reduce the size of training data butcan improve classification accuracy.
 
 \section{Introduction}\label{sec:introduction}
 
@@ -180,22 +180,9 @@ classifiers and compare their error rates.
 
 \section{Results}\label{sec:results}
 
-During the course of our project, we constructed several autoencoders consisting
-of a variety of dimensions. We focus here on autoencoders constructed from RBMs
-consisting of 3000, 1500, 750, 100, 30, and 10 node hidden layers. In addition
-to these hidden layers, all autoencoders have 784 node input and output layers.
-For example, our narrowest waist autoencoder consists of
-784-3000-1500-750-100-30-10-30-100-750-1500-3000-784 node layers, while our
-fattest waist autoencoder consists of 784-3000-784 node layers. In Fig. 1 we
-show several autoencoded handwritten digits. From the leftmost to rightmost
-columns we have: the original image, encoded using 784-3000-1500-750,
-784-3000-1500-750-100, 784-3000-1500-750-100-30, and
-784-3000-1500-750-100-30-10. As expected, the quality of the reproduction
-reduces from left to right.
+During the course of our project, we constructed several autoencoders consisting of a variety of dimensions. We focus here on autoencoders constructed from RBMs consisting of 3000, 1500, 750, 100, 30, and 10 node hidden layers. In addition to these hidden layers, all autoencoders have 784 node input and output layers. For example, our narrowest waist autoencoder consists of 784-3000-1500-750-100-30-10-30-100-750-1500-3000-784 node layers, while our fattest wait autoencoder consists of 784-3000-784 node layers. In Fig. 1 we show several autoencoded handwritten digits. From the leftmost to rightmost columns we have: the original image, encoded using 784-3000-1500-750, 784-3000-1500-750-100, 784-3000-1500-750-100-30, and 784-3000-1500-750-100-30-10. As expected, the quality of the reproduction reduces from left to right. Figure 2 shows the 10 detectors, projected into the 28x28 pixel input space, used by our maximally layered autoencoder---that used to generate the images of the rightmost column of Fig. 1.
 
 \begin{figure}[htbp!]
-    \centering
-    \begin{subfigure}{.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{otherIncremental_0-4.png}
         \caption{Encoding of digits $0-4$ in each layer}
@@ -237,6 +224,8 @@ error rates increase.
     \caption{Training and test error of NB classifier on highest-level autoencoder features}
     \label{fig:error}
 \end{figure}%
+
+The decrease in the error rate shown in column E of Fig. 3 corresponding to the 100 node feature space, demonstrates the efficacy of this feature learning technique. By working in this learned feature space, we simultaneously reduce the size of our data by more than a factor of 7 but measurably improved our classification accuracy. 
 
 \section{Conclusion}\label{sec:conclusion}
 
