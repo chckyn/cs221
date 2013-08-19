@@ -25,10 +25,10 @@ for i, e in enumerate(errors):
     axes += ax.bar(ind[i], e[1][0], width, color='r')
     axes += ax.bar(ind[i]+width, e[1][1], width, color='y')
 
-ax.set_ylabel('Error')
-ax.set_title('Training and test error of NB classifier\non highest-level autoencoder features')
-ax.set_xticks(ind+width)
-ax.set_xticklabels( ['\n'+chr(i) for i in range(ord('A'),ord('A')+len(errors))] )
+ax.set_ylabel('Error\n', fontsize=20)
+for tick in ax.yaxis.get_major_ticks():
+    tick.label.set_fontsize(14) 
+ax.set_xticklabels( ['\n'+chr(i) for i in range(ord('A'),ord('A')+len(errors))] , fontsize=14)
 
 textstr = ""
 l = ord('A')
@@ -37,12 +37,24 @@ for i in range(len(errors)):
     l+=1
 
 props = dict(boxstyle='round', facecolor='white', alpha=1)
-ax.text(1.09, 0.8, textstr, transform=ax.transAxes, fontsize=12,
+ax.text(1.09, 0.8, textstr, transform=ax.transAxes, fontsize=14,
         verticalalignment='top', bbox=props)
 
 ax.legend([axes[0], axes[1]], ['training error', 'test error'], bbox_to_anchor=(1.5,1))
 
 fig = plt.gcf()
 fig.set_facecolor('white')
+plt.tick_params(\
+    axis='x',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    bottom='off',      # ticks along the bottom edge are off
+    top='off',         # ticks along the top edge are off
+)
+plt.tick_params(\
+    axis='y',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    left='off',        # ticks along the bottom edge are off
+    right='off',         # ticks along the top edge are off
+)
 plt.subplots_adjust(right=0.6)
 plt.show()
