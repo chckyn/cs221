@@ -63,95 +63,21 @@ urlcolor=black
 
 This is a short introduction.
 
-\section{First Section}\label{sec:firstSectionLabel}
+\section{Introduction}\label{sec:introduction}
 
-This is the first section. {\em These are emphasized words}.
+A fundamental challenge to supervised machine learning is that of feature selection. There exist many strategies for determining a set of variables derived from an original representation to accurately classify domain data. Ideally, the selected variables minimize redundant and/or irrelevant information and thereby reduce the risk of overfitting. Historically, domain experts and computer scientists have laboriously handcrafted feature sets for a variety of machine learning problems. These manually engineered features suffer from the requirements of domain expertise and a great deal of work, and therefore, might not scale well. Moreover, such feature sets can inadvertently ignore important structure in the data. These deficiencies can be addressed via unsupervised feature learning using dimension reduction techniques such as principal component anaysis (PCA) or factor analysis. Recently it was found that K-means clustering offers another straightforward method for determining an efficacious feature space (e.g. the CS221 Visual Cortex programming assigment). In this report we document a project in which unsupervised feature learning is performed using autoencoders consisting of multilayer feedforward neural networks.
 
-Here is some math: $\sum_{i=1}^n{n}=\frac{n(n+1)}{2}$.
+An autoencoder is a special type of neural network consisting of an input layer, an output layer, and one or more hidden layers. An autoencoder aims to approximate the identity function as closely as possible, reproducing the signals of its input layer at its output layer. By placing constraints on the network, input signals must be compressed and decompressed using optimized encodings in order to approximately reproduce the input. Such encodings can then serve as feature sets in a supervis
+ed learning problem. The challenge is training such autoencoders in order to discover the optimal e
+ncoding for a particular domain space.
 
-\section{Second Section}\label{sec:secondSectionLabel}
+\section{Method}\label{sec:method}
 
-This is the second section.
+Until recently, the standard approach to training multilayer feedforward neural networks, such as autoencoders, is to use a variation of the backpropagation algorithm. We describe this algorithm later in this report. For now, we merely point out a key feature of the backpropagation algorithm: it attempts to optimize all weights and biases of a neural network simultaneously. In the case of large networks containing multiple layers and 1000+ nodes, backpropagation following random initialization of the parametes can fail due to local minima in the objective function [1]_. A technique pioneered by Hinton et al. [2]_ largely overcomes this challenge by "pretraining" individual restricted Boltzmann machines (RBMs), which can then be "unrolled" to form a deep, multilayer autoencoder with weights and biases that are close to optimal prior to running a backpropagation algorithm.
 
-Got table?
+RBMs may be represented as a complete bipartite graph where one set corresponds to "visible" units $\nu_i$ and the other to "hidden" units $h_j$. We work with binary RBMs in which each node is either on or off. A weight $w_{ij}$ is associated with each edge that connects a visible unit $\nu_i$ to a hidden unit $h_j$. Given the state of all visible units, the probability that a hidden unit is in the "on" state is given by $\langle h_j \rangle = \sigma\left(b_j + \sum_i{\nu_iW_{ij}}\right)$, where $\sigma (x)$ is the logistic function $1/(1 + \mathrm{exp}(-x))$ and $b_j$ is the bias associated with hidden unit $j$.
 
-\begin{table}[p!]
-    \centering
-    \begin{tabu}{m{.3cm} m{6cm} m{.45cm} m{7cm} }
-        \rowfont{\bfseries} & Original Ordering & & {\em SRR} Ordering \\
-        \toprule
-        1. & Great Value Purified Water, 24ct         & 1.  & Great Value Purified Water, 24ct \\ \midrule
-        2. & Nestle Waters Bottled Spring Water, 24ct & 2.  & Nestle Waters Bottled Spring Water, 24ct \\ \midrule
-        3. & Voss Water, 16.9 oz (Pack of 24)         & 90. & Arrowhead Mountain Spring Water, 3 l \\ \midrule
-        4. & CA Cherry Sparkling Water, 1 l, 12pk     & 63. & Great Value: Distilled Water, 1 Gal \\ \midrule
-        5. & CA Water, 1 l, 12ct                      & 38. & Arrowhead Mountain Spring Water, 2.5gal \\ \midrule
-        6. & CA Peach Sparkling Water, 1 l, 12ct      & 8.  & CA Orange Sparkling Water, 1 l, 12pk \\
-        \bottomrule
-    \end{tabu}
-    \caption{Original Ordering vs. {\em SRR} Ordering for ``water'' query}
-    \label{tab:compare_orderings}
-\end{table}
-\begin{table}[htbp!]
-    \centering
-    \begin{tabu}{ c n{1}{5} n{1}{5} n{1}{5} n{1}{5} n{1}{5} n{1}{5} n{1}{5} }
-    \rowfont{\bfseries} & \multicolumn{1}{c}{\Large$\sigma$} & \multicolumn{1}{c}{CTR} & \multicolumn{1}{c}{Clicks} & \multicolumn{1}{c}{Items} & \multicolumn{1}{c}{Carts} & \multicolumn{1}{c}{Queries} & {Titles}  \\
-        \toprule
-        %% raw similarity scores
-        %1. & 0.943746587049 & 0.0754 & 0.00227790432802 &  0.017955801105   &  0.0 &  0.0104712041885   &  0.0909090909091 \\ \midrule
-        %2. & 1.20210752946  & 0.0390 & 0.00389105058366 &  0.0251450676983  &  0.0 &  0.0254833040422   &  0.0833333333333 \\ \midrule
-        %3. & 0.357056025563 & 0.0254 & 0.0              &  0.0227882037534  &  0.0 & 0.00555212831585   &  0.0769230769231 \\ \midrule
-        %4. & 0.75268102742  & 0.0195 & 0.0016835016835  &  0.0233918128655  &  0.0 &  0.0016339869281   &  0.0666666666667 \\ \midrule
-        %5. & 0.736731785955 & 0.0153 & 0.00173310225303 &  0.016077170418   &  0.0 &  0.00390015600624  &  0.0666666666667 \\ \midrule
-        %6. & 0.174834647629 & 0.0129 & 0.0              &  0.00954198473282 &  0.0 &  0.000793021411578 &  0.0666666666667 \\ \midrule
-        
-        % tuned scores
-        1. & 0.943746587049 & 0.0754 & 0.525001355894 & 0.160481073286 & 0.0 & 0.153493353029 & 0.02937080484    \\ \midrule
-        2. & 1.20210752946 & 0.039 & 0.686161147707 & 0.210098155039 & 0.0 & 0.239452362893 & 0.0273958638253    \\ \midrule
-        3. & 0.357056025563 & 0.0254 & 0.0 & 0.194190538676 & 0.0 & 0.11176890762 & 0.0256965792667              \\ \midrule
-        4. & 0.75268102742 & 0.0195 & 0.451335466924 & 0.198294695203 & 0.0 & 0.060633906259 & 0.0229169590345   \\ \midrule
-        5. & 0.736731785955 & 0.0153 & 0.457935991834 & 0.146901991555 & 0.0 & 0.0936768435316 & 0.0229169590345 \\ \midrule
-        6. & 0.174834647629 & 0.0129 & 0.0 & 0.0967767348166 & 0.0 & 0.0422409537777 & 0.0229169590345           \\
-        \bottomrule
-    \end{tabu}
-    \caption{Index similarity scores of the top six original results to \\ ``Primo Ceramic Crock Water Cooler with Stand''}
-    \label{tab:original_sim_scores}
-\end{table}
-\begin{table}[htbp!]
-    \centering
-    %\begin{tabu}{ c c  c }
-    %    \rowfont{\bfseries} & CTR of demoted items & CTR of promoted items  \\
-    %    \noalign{\smallskip}
-    %    \noalign{\smallskip}
-    %    \toprule
-    %    {\bfseries \em SRR} & 6.24\% & 1.79\% \\
-    %    \midrule
-    %    {\bfseries \em RRR} & 2.42\% & 3.67\% \\
-    %    \bottomrule
-    %\end{tabu}
-    \begin{tabu}{ c n{1}{5} n{1}{5} n{1}{5} n{1}{5} n{1}{5} n{1}{5} n{1}{5}}
-    \rowfont{\bfseries} & \multicolumn{1}{c}{\Large$\sigma$} & \multicolumn{1}{c}{CTR} & \multicolumn{1}{c}{Clicks} & \multicolumn{1}{c}{Items} & \multicolumn{1}{c}{Carts} & \multicolumn{1}{c}{Queries} & {Titles}  \\
-        \toprule
-        %% raw similarity scores
-        %1.  & 0.943746587049 & 0.0754     & 0.00227790432802 &  0.017955801105 &  0.0 &  0.0104712041885 &  0.0909090909091  \\ \midrule
-        %2.  & 1.20210752946  & 0.0390     & 0.00389105058366 &  0.0251450676983 &  0.0 &  0.0254833040422 &  0.0833333333333 \\ \midrule
-        %90. & 0.95310150677  & 0.00022623 & 0.00357142857143 &  0.027027027027 &  0.0 &  0.000920810313076 &  0.0833333333333\\ \midrule
-        %63. & 0.949541641831 & 0.00049366 & 0.00261096605744 &  0.0338345864662 &  0.0 &  0.00385802469136 &  0.0833333333333\\ \midrule
-        %38. & 0.93768536446  & 0.000914   & 0.00344234079174 &  0.0331384015595 &  0.0 &  0.0 &  0.0909090909091             \\ \midrule
-        %8. & 0.896706599209 & 0.01       & 0.00355239786856 &  0.0248565965583 &  0.0 &  0.0 &  0.0666666666667             \\ \midrule
-
-        % tuned scores
-        1. & 0.944 & 0.0754   & 0.525 & 0.16  & 0.0 & 0.153  & 0.02947080484  \\ \midrule
-        2. & 1.2   & 0.039    & 0.686 & 0.21  & 0.0 & 0.239  & 0.0274253      \\ \midrule
-        90. & 0.953 & 0.000226 & 0.657 & 0.223 & 0.0 & 0.0455 & 0.027438253    \\ \midrule
-        63. & 0.95  & 0.000493 & 0.562 & 0.266 & 0.0 & 0.0932 & 0.027458638253 \\ \midrule
-        38. & 0.938 & 0.000914 & 0.645 & 0.262 & 0.0 & 0.0    & 0.0294         \\ \midrule
-        8. & 0.897 & 0.01     & 0.656 & 0.208 & 0.0 & 0.0    & 0.0229         \\
-        \bottomrule
-    \end{tabu}
-    \caption{Index similarity scores of the top six {\em SRR} results to \\ ``Primo Ceramic Crock Water Cooler with Stand''}
-    \label{tab:rerank_sim_scores}
-\end{table} 
-
+\section{Results}\label{sec:results}
 
 \begin{figure}[htbp!]
     \centering
@@ -172,6 +98,12 @@ Here's an equation:
 \begin{equation}
     \mathscr{C} = \frac{\sum_{q \in Q}\sum_{i=1}^{L_q}\mathds{1}\left\{click\; @\; i \wedge i \leq 16\right\}}{\sum_{q \in Q}\sum_{i=1}^{L_q}\mathds{1}\left\{i \leq 16\right\}},
 \end{equation}
+
+\section{Conclusion}\label{sec:conclusion}
+
+% CITATIONS NEED TO BE PUT INTO LATEX
+.. [1] N. Kambhatla and T. Leen. Neural Comput., 9:1493, 1997.
+.. [2] G.E. Hinton and R.R. Salakhutdinov. Science, 313:504, 2006.
 
 \end{document}
 
