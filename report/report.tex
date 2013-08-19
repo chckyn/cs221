@@ -93,40 +93,40 @@ These autoencoders essentially function by compressing and decompressing the inp
 
 \section{Results}\label{sec:results}
 
-During the course of our project, we constructed several autoencoders consisting of a variety of dimensions. We focus here on autoencoders constructed from RBMs consisting of 3000, 1500, 750, 100, 30, and 10 node hidden layers. In addition to these hidden layers, all autoencoders have 784 node input and output layers. For example, our narrowest waist autoencoder consists of 784-3000-1500-750-100-30-10-30-100-750-1500-3000-784 node layers, while our fattest wait autoencoder consists of 784-3000-784 node layers. In Fig. 1 we show several autoencoded handwritten digits. From the leftmost to rightmost columns we have: the original image, encoded using 784-3000-1500-750, 784-3000-1500-750-100, 784-3000-1500-750-100-30, and 784-3000-1500-750-100-30-10. As expected, the quality of the reproduction reduces from left to right.
+During the course of our project, we constructed several autoencoders consisting of a variety of dimensions. We focus here on autoencoders constructed from RBMs consisting of 3000, 1500, 750, 100, 30, and 10 node hidden layers. In addition to these hidden layers, all autoencoders have 784 node input and output layers. For example, our narrowest waist autoencoder consists of 784-3000-1500-750-100-30-10-30-100-750-1500-3000-784 node layers, while our fattest wait autoencoder consists of 784-3000-784 node layers. In Fig. 1 we show several autoencoded handwritten digits. From the leftmost to rightmost columns we have: the original image, encoded using 784-3000-1500-750, 784-3000-1500-750-100, 784-3000-1500-750-100-30, and 784-3000-1500-750-100-30-10. As expected, the quality of the reproduction reduces from left to right. Figure 2 shows the 10 detectors, projected into the 28x28
 
 \begin{figure}[htbp!]
     \centering
     \begin{subfigure}{.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{incremental_0-4.png}
+        \includegraphics[width=\textwidth]{otherIncremental_0-4.png}
         \caption{Encoding of digits $0-4$ in each layer}
         \label{fig:incremental_0-4}
     \end{subfigure}%
     \quad
     \begin{subfigure}{.45\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{incremental_5-9.png}
+        \includegraphics[width=\textwidth]{otherIncremental_5-9.png}
         \caption{Encoding of digits $5-9$ in each layer}
         \label{fig:incremental_5-9}
     \end{subfigure}
-    \caption{Intermediate encodings for 784-3000-1500-750-100-30-10 multilayer autoencoder.}
+    \caption{Intermediate encodings for 784-...-750-100-30-10 multilayer autoencoder.}
 \end{figure}
-
-To test the utility of the learned feature spaces within the context of supervised learning, we trained several naive Bayes classfiers. The error rates obtained for both the training and test data are shown in Fig. 2. Column A reveals a training error of about 17\% and test error of about 15\% using the raw data. This is our baseline. In column B we see the error rates are essentially unchanged using the expanded 3000 feature nodes. Remarkably, for columns C and D, corresponding to 1500 and 750 feature nodes, respectively, we small bu significant reductions in the error rate. More striking, however, is that column E, which corresponds to 100 feature nodes, also shows a reduced error rate despite a dimensionally reduced representation of the data. As we continue to reduce the dimensionality of our feature space, columns F and G, the error rates increase.
-
-\begin{figure}[htbp!]
-    \centering
-    \includegraphics[width=\textwidth]{trainingAndTestError.png}
-    \caption{Training and test error of NB classifier on highest-level autoencoder features}
-    \label{fig:error}
-\end{figure}%
 
 \begin{figure}[htbp!]
     \centering
     \includegraphics[width=\textwidth]{detectors.png}
     \caption{Highest level detectors for 784-3000-1500-750-100-30-10.}
     \label{fig:detectors}
+\end{figure}%
+
+To test the utility of the learned feature spaces within the context of supervised learning, we trained several naive Bayes classifiers. The error rates obtained for both the training and test data are shown in Fig. 3. Column A reveals a training error of about 17\% and test error of about 15\% using the raw data. This is our baseline. In column B we see the error rates are essentially unchanged using the expanded 3000 feature nodes. Remarkably, for columns C and D, corresponding to 1500 and 750 feature nodes, respectively, we small bu significant reductions in the error rate. More striking, however, is that column E, which corresponds to 100 feature nodes, also shows a reduced error rate despite a dimensionally reduced representation of the data. As we continue to reduce the dimensionality of our feature space, columns F and G, the error rates increase.
+
+\begin{figure}[htbp!]
+    \centering
+    \includegraphics[width=\textwidth]{trainingAndTestError.png}
+    \caption{Training and test error of NB classifier on highest-level autoencoder features}
+    \label{fig:error}
 \end{figure}%
 
 \section{Conclusion}\label{sec:conclusion}
